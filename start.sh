@@ -30,7 +30,7 @@ function backup_remote(){
   if [[ ! -z ${DATABASES} ]]; then
     mysqldump -h dbserver -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --databases ${DATABASES} | 7zr a -si "${backupfile}"
   elif [[ ! -z ${SKIP_DATABASES} ]]; then
-    BACKUPDBS=$(mysql -N -h dbserver -u ${DBUSER:-root} --password=${DBPASS:-""} <<<"SHOW DATABASES" | grep -v ${SKIP_DATABASES/ /\\|} grep -v information_schema | grep -v performance_schema | grep -v sys | tr "\n" " ")
+    BACKUPDBS=$(mysql -N -h dbserver -u ${DBUSER:-root} --password=${DBPASS:-""} <<<"SHOW DATABASES" | grep -v "${SKIP_DATABASES/ /\\|}" | grep -v information_schema | grep -v performance_schema | grep -v sys | tr "\n" " ")
     mysqldump -h dbserver -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --databases ${BACKUPDBS} | 7zr a -si "${backupfile}"
   else
     mysqldump -h dbserver -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --all-databases | 7zr a -si "${backupfile}"
@@ -43,7 +43,7 @@ function backup_local(){
   if [[ ! -z ${DATABASES} ]]; then
     mysqldump -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --databases ${DATABASES} | 7zr a -si "${backupfile}"
   elif [[ ! -z ${SKIP_DATABASES} ]]; then
-    BACKUPDBS=$(mysql -N -u ${DBUSER:-root} --password=${DBPASS:-""} <<<"SHOW DATABASES" | grep -v ${SKIP_DATABASES/ /\\|} grep -v information_schema | grep -v performance_schema | grep -v sys | tr "\n" " ")
+    BACKUPDBS=$(mysql -N -u ${DBUSER:-root} --password=${DBPASS:-""} <<<"SHOW DATABASES" | grep -v "${SKIP_DATABASES/ /\\|}" | grep -v information_schema | grep -v performance_schema | grep -v sys | tr "\n" " ")
     mysqldump -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --databases ${BACKUPDBS} | 7zr a -si "${backupfile}"
   else
     mysqldump -u ${DBUSER:-root} --password=${DBPASS:-""} --max_allowed_packet=512m --add-drop-database --all-databases | 7zr a -si "${backupfile}"
