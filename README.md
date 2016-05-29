@@ -53,7 +53,11 @@ or with
 -env SKIP_DATABASES="dbx dby"
 ```
 
-You could either use `DATABASES` or `SKIP_DATABASES` but not both together.
+You could either use `DATABASES` or `SKIP_DATABASES` but not both together. On `SKIP_DATABASES` following databases will be skipped by default:
+
+- information_schema
+- performance_schema
+- sys
 
 ## Predefined variables
 The default _DBUSER_ is _root_ and by default all databases becomes backuped, such that both commands could be shortened as follows:
